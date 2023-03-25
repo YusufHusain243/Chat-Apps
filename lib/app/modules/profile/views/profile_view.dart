@@ -11,6 +11,7 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key? key}) : super(key: key);
 
   final authC = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,29 +51,31 @@ class ProfileView extends GetView<ProfileController> {
                     width: 175,
                     height: 175,
                     margin: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.black38,
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      image: const DecorationImage(
-                        image: AssetImage(
-                          "assets/logo/noimage.png",
-                        ),
-                        fit: BoxFit.cover,
-                      ),
+                      child: authC.user.photoUrl! == "noimage"
+                          ? Image.asset(
+                              "assets/logo/noimage.png",
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              authC.user.photoUrl!,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                 ),
-                const Text(
-                  "Lorem Ipsum",
-                  style: TextStyle(
+                Text(
+                  "${authC.user.name}",
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const Text(
-                  "Lorem Ipsum@gmail.com",
-                  style: TextStyle(
+                Text(
+                  "${authC.user.email}",
+                  style: const TextStyle(
                     fontSize: 20,
                   ),
                   textAlign: TextAlign.center,
