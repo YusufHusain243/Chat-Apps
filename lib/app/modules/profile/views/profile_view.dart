@@ -53,28 +53,30 @@ class ProfileView extends GetView<ProfileController> {
                     margin: const EdgeInsets.all(15),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: authC.user.photoUrl! == "noimage"
+                      child: authC.user.value.photoUrl! == "noimage"
                           ? Image.asset(
                               "assets/logo/noimage.png",
                               fit: BoxFit.cover,
                             )
                           : Image.network(
-                              authC.user.photoUrl!,
+                              authC.user.value.photoUrl!,
                               fit: BoxFit.cover,
                             ),
                     ),
                   ),
                 ),
-                Text(
-                  "${authC.user.name}",
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                Obx(
+                  () => Text(
+                    "${authC.user.value.name}",
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
                 Text(
-                  "${authC.user.email}",
+                  "${authC.user.value.email}",
                   style: const TextStyle(
                     fontSize: 20,
                   ),
