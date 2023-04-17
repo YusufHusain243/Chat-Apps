@@ -9,40 +9,6 @@ import '../controllers/search_controller.dart';
 class SearchView extends GetView<SearchController> {
   SearchView({Key? key}) : super(key: key);
 
-  final List<Widget> friends = List.generate(
-    20,
-    (index) => ListTile(
-      leading: CircleAvatar(
-        radius: 30,
-        backgroundColor: Colors.black26,
-        child: Image.asset(
-          "assets/logo/noimage.png",
-          fit: BoxFit.cover,
-        ),
-      ),
-      title: Text(
-        "Orang ke $index",
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      subtitle: Text(
-        "orang$index@gmail.com",
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      trailing: GestureDetector(
-        onTap: () => Get.toNamed(Routes.CHAT_ROOM),
-        child: const Chip(
-          label: Text("Message"),
-        ),
-      ),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +29,7 @@ class SearchView extends GetView<SearchController> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: TextField(
+                onChanged: (value) => controller.searchFriend(value),
                 controller: controller.searchC,
                 cursorColor: Colors.red[900],
                 decoration: InputDecoration(
@@ -101,20 +68,51 @@ class SearchView extends GetView<SearchController> {
           ),
         ),
       ),
-      body: friends.isEmpty
-          ? Center(
-              child: SizedBox(
-                width: Get.width * 0.7,
-                height: Get.width * 0.7,
-                child: Lottie.asset("assets/lottie/empty.json"),
+      body: Obx(
+        () => controller.tempSearch.length == 0
+            ? Center(
+                child: SizedBox(
+                  width: Get.width * 0.7,
+                  height: Get.width * 0.7,
+                  child: Lottie.asset("assets/lottie/empty.json"),
+                ),
+              )
+            : ListView.builder(
+                itemCount: controller.tempSearch.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.black26,
+                      child: Image.asset(
+                        "assets/logo/noimage.png",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: Text(
+                      "${controller.tempSearch[index]['name']}",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "${controller.tempSearch[index]['name']}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    trailing: GestureDetector(
+                      onTap: () => Get.toNamed(Routes.CHAT_ROOM),
+                      child: const Chip(
+                        label: Text("Message"),
+                      ),
+                    ),
+                  );
+                },
               ),
-            )
-          : ListView.builder(
-              itemCount: friends.length,
-              itemBuilder: (BuildContext context, int index) {
-                return friends[index];
-              },
-            ),
+      ),
     );
   }
 }
